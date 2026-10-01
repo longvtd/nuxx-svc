@@ -1,0 +1,16 @@
+service:
+  ##APIM gateway
+  apim:
+    url: https://openapi.example.local/apim
+  apim-pv:
+    url: https://openapi.example.local/apim-pv
+  apim-pb:
+    url: https://openapi.example.local/apim-pb
+amdocs:
+  url: https://openapi.example.local/amdocs
+#Domain 01 - 홈주문
+NUXX-SVC:
+  url: https://nuxx.example.local
+#Domain 02 - 고객
+NUXY-SVC:
+  url: https://nuxy.example.local

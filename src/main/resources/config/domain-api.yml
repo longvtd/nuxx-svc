@@ -1,0 +1,12 @@
+#Domain 02 - 고객
+NUXY-SVC:
+  api-selectCust-001: #Select customer by id
+    url: /selectCust/{custId}
+  api-selectCustList-001:
+    url: /selectCust
+  saveCust-001: #Save customer (apiId without api- prefix)
+    url: /saveCust
+#Domain registered only in domain-api.yml (missing in domain.yml)
+NUXZ-SVC:
+  api-selectPoint-001: #Select point
+    url: /selectPoint/{custId}
