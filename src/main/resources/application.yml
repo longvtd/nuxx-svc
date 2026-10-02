@@ -1,5 +1,0 @@
-spring:
-  application:
-    name: nuxx-svc
-server:
-  port: 8080
