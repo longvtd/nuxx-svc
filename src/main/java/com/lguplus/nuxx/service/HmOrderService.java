@@ -153,6 +153,8 @@ public class HmOrderService {
      */
     public String changePhone(List<PhoneDTO> listPhone) {
         PhoneEntity phoneEntity = listPhone.get(0).toEntity();
+        CustDTO custDTO = hmCustClientService.selectCustByApim(listPhone.get(0).getId()); //select customer info
+        phoneEntity.setName(custDTO.getCustNm());
         repoHmOrder.save(phoneEntity);
         return "ok";
     }
