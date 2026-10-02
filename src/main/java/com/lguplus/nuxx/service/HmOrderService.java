@@ -1,6 +1,12 @@
 package com.lguplus.nuxx.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lguplus.nuxx.common.UtilConstants;
+import com.lguplus.nuxx.dto.CustDTO;
 import com.lguplus.nuxx.dto.PhoneDTO;
 import com.lguplus.nuxx.dto.PhoneDetailDTO;
 import com.lguplus.nuxx.dto.PhoneReqDTO;
@@ -11,9 +17,6 @@ import com.lguplus.nuxx.repository.HmOrderNativeQueryRepository;
 import com.lguplus.nuxx.repository.HmOrderRepository;
 import com.lguplus.wafful.event.WaffulEventPublisher;
 import com.lguplus.wafful.message.WaffulMessageProducer;
-import java.util.List;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @name: Home order Service
@@ -37,6 +40,7 @@ public class HmOrderService {
     private final HmOrderRepository repoHmOrder;
     private final HmOrderNativeQueryRepository nativeRepo;
     private final HmOrderDetailService hmOrderDetailService;
+    private final HmCustClientService hmCustClientService;
     private final WaffulEventPublisher pubEvent;
     private final WaffulMessageProducer waffulMessageProducer;
 
@@ -95,6 +99,10 @@ public class HmOrderService {
             return;
         }
         List<PhoneDetailDTO> listDetail = hmOrderDetailService.retrievePhoneOrderDetail(dtoObj);
+        CustDTO custDTO = hmCustClientService.selectCustByApim(dtoObj.getId()); //select customer info
+        for (PhoneDetailDTO phoneDetailDTO : listDetail) {
+        	phoneDetailDTO.setCustNm(custDTO.getCustNm());
+		}
         String rslt = createPhone(listPhone);
         if ("ok".equals(rslt)) {
             createPhoneTbEvent(listPhone.get(0));
