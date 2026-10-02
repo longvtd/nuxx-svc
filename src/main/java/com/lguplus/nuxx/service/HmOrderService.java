@@ -68,7 +68,7 @@ public class HmOrderService {
 	 * @name: 휴대폰주문목록조회
 	 * <PRE>
 	 * 요청 DTO 식별자로 휴대폰 주문 목록을 조회합니다.
-	 * [DB-READ-01] repository read
+     * [DB-READ-01] JpaRepository findAllById / TB_HM_PHONE_M
 	 * </PRE>
 	 * @MethodName: retrievePhone
 	 * @Part: 차세대 아키텍처
@@ -83,7 +83,7 @@ public class HmOrderService {
 	 * @name: 휴대폰주문단건조회
 	 * <PRE>
 	 * 휴대폰 식별자로 주문 정보를 조회합니다.
-	 * [DB-READ-01] repository read
+     * [DB-READ-01] JpaRepository findAllById / TB_HM_PHONE_M
 	 * </PRE>
 	 * @MethodName: retrievePhone
 	 * @Part: 차세대 아키텍처
@@ -136,8 +136,9 @@ public class HmOrderService {
 	/**
 	 * @name: 휴대폰주문생성
 	 * <PRE>
+	 * [DB-READ-02] EntityManager native SELECT / TB_HM_PHONE_M
+	 * [DB-WRITE-01] JpaRepository save / TB_HM_PHONE_M
 	 * 주문 이름을 조회한 뒤 휴대폰 주문을 저장합니다.
-	 * [DB-WRITE-01] repository write
 	 * </PRE>
 	 * @MethodName: createPhone
 	 * @Part: 차세대 아키텍처
@@ -154,8 +155,9 @@ public class HmOrderService {
 	/**
 	 * @name: 휴대폰주문변경
 	 * <PRE>
-	 * 고객 정보를 조회하여 주문 이름을 갱신한 뒤 저장합니다.
-	 * [DB-WRITE-01] repository write
+	 * 고객 External API 응답으로 주문 이름과 사용 여부를 native UPDATE로 반영합니다.
+	 * [DB-WRITE-02] HmOrderRepositoryCustom.updatePhoneName / TB_HM_PHONE_M
+	 * [DB-WRITE-02] EntityManager native UPDATE / TB_HM_PHONE_M
 	 * </PRE>
 	 * @MethodName: changePhone
 	 * @Part: 차세대 아키텍처
@@ -164,11 +166,24 @@ public class HmOrderService {
 	 */
 	public String changePhone(List<PhoneDTO> values) {
 		PhoneEntity e = values.get(0).toEntity();
-		CustDTO c = custClient.selectCustByApim(values.get(0).getId());
-		e.setName(c.getCustNm());
-		repoHmOrder.save(e);
-		return "ok";
-	}
+        CustDTO c = custClient.selectCustByApim(values.get(0).getId());
+        e.setName(c.getCustNm());
+        repoHmOrder.updatePhoneName(e.getId(), e.getName());
+        nativeRepo.updatePhoneUseYn(e.getId(), e.getUseYn());
+        return "ok";
+    }
+
+    /**
+     * @name: 휴대폰주문요약조회
+     * <PRE>[DB-JOIN-01] native SELECT JOIN / TB_HM_PHONE_M, TB_HM_PHONE_D, TB_HM_CUST_ORDER_M</PRE>
+     * @MethodName: retrieveOrderSummary
+     * @Part: 차세대 아키텍처
+     * @author: Tester (tester@example.local)
+     * @ModifiedDate: 2026. 10. 02. 21:00:00
+     */
+    public List<?> retrieveOrderSummary(String phoneId) {
+        return nativeRepo.selectPhoneOrderSummary(phoneId);
+    }
 
 	/**
 	 * @name: 휴대폰주문레거시조회

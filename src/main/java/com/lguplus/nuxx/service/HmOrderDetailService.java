@@ -49,19 +49,31 @@ public class HmOrderDetailService {
 	 * @name: 휴대폰주문상세조회
 	 * <PRE>
 	 * 휴대폰 식별자로 주문 상세 목록을 조회합니다.
-	 * [DB-READ-01] repository read
+	 * [DB-READ-03] derived repository query / TB_HM_PHONE_D
 	 * </PRE>
 	 * @MethodName: retrievePhoneOrderDetail
 	 * @Part: 차세대 아키텍처
 	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
 	 * @ModifiedDate: 2026. 10. 02. 21:00:00
 	 */
-	public List<PhoneDetailDTO> retrievePhoneOrderDetail(PhoneReqDTO req) {
-		List<PhoneDetailDTO> out = new ArrayList<>();
-		for (PhoneDetailEntity e : detailRepo.findByPhoneId(req.getId()))
-			out.add(new PhoneDetailDTO(e.getId(), e.getPhoneId()));
-		return out;
-	}
+    public List<PhoneDetailDTO> retrievePhoneOrderDetail(PhoneReqDTO req) {
+        List<PhoneDetailDTO> out = new ArrayList<>();
+        for (PhoneDetailEntity e : detailRepo.findByPhoneId(req.getId()))
+            out.add(new PhoneDetailDTO(e.getId(), e.getPhoneId()));
+        return out;
+    }
+
+    /**
+     * @name: 휴대폰주문상세저장
+     * <PRE>[DB-WRITE-03] JpaRepository save / TB_HM_PHONE_D</PRE>
+     * @MethodName: savePhoneOrderDetail
+     * @Part: 차세대 아키텍처
+     * @author: Tester (tester@example.local)
+     * @ModifiedDate: 2026. 10. 02. 21:00:00
+     */
+    public PhoneDetailEntity savePhoneOrderDetail(PhoneDetailEntity entity) {
+        return detailRepo.save(entity);
+    }
 
 	/**
 	 * @name: 주문상세고객정보반영
