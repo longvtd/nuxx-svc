@@ -1,11 +1,13 @@
 package com.lguplus.nuxx.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.common.rest.ApimRestTemplate;
+import com.common.rest.WaffulRestTemplete;
 import com.lguplus.nuxx.common.ApiUrlConstants;
 import com.lguplus.nuxx.dto.CustDTO;
-import com.lguplus.wafful.rest.ApimRestTemplate;
-import com.lguplus.wafful.rest.WaffulRestTemplete;
-import java.util.List;
-import org.springframework.stereotype.Service;
 
 /**
  * @name: Home customer client Service
@@ -68,7 +70,19 @@ public class HmCustClientService {
         String sUrl = "{@nuxy-svc.api-selectCust-001}";
         return (CustDTO) apimRestTemplate.post(sUrl, new Object(), custId);
     }
-
+    /**
+     * @name: 고객프로필조회
+     * <PRE>
+     * 고객 단건 정보를 APIM 외부 API를 통해 조회
+     * </PRE>
+     * @MethodName: selectCustProfile
+     * @Part: 차세대 아키텍처
+     * @author: Tester (tester@example.local)
+     * @ModifiedDate: 2026. 10. 02. 19:30:00
+     */
+    public CustDTO selectCustProfile(String custId) {
+        return this.selectCustByApim(custId);
+    }
     /**
      * @name: 고객목록조회
      * <PRE>

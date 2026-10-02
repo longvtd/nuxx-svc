@@ -1,12 +1,15 @@
 package com.lguplus.nuxx.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.lguplus.nuxx.dto.CustDTO;
 import com.lguplus.nuxx.dto.PhoneDetailDTO;
 import com.lguplus.nuxx.dto.PhoneReqDTO;
 import com.lguplus.nuxx.entity.PhoneDetailEntity;
 import com.lguplus.nuxx.repository.PhoneDetailRepository;
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.stereotype.Service;
 
 /**
  * @name: Home order detail Service
@@ -48,5 +51,21 @@ public class HmOrderDetailService {
             result.add(new PhoneDetailDTO(entity.getId(), entity.getPhoneId()));
         }
         return result;
+    }
+    
+    /**
+     * @name: 주문상세고객정보반영
+     * <PRE>
+     * 조회된 고객명을 휴대폰 주문 상세 목록에 반영
+     * </PRE>
+     * @MethodName: applyCustomerName
+     * @Part: 차세대 아키텍처
+     * @author: Tester (tester@example.local)
+     * @ModifiedDate: 2026. 10. 02. 19:30:00
+     */
+    public void applyCustomerName(List<PhoneDetailDTO> details, CustDTO customer) {
+        for (PhoneDetailDTO detail : details) {
+            detail.setCustNm(customer.getCustNm());
+        }
     }
 }

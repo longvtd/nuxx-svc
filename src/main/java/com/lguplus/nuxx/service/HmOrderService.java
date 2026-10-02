@@ -45,13 +45,15 @@ public class HmOrderService {
     private final WaffulMessageProducer waffulMessageProducer;
 
     public HmOrderService(HmOrderRepository repoHmOrder, HmOrderNativeQueryRepository nativeRepo,
-            HmOrderDetailService hmOrderDetailService, WaffulEventPublisher pubEvent,
+    		HmOrderDetailService hmOrderDetailService, HmCustClientService hmCustClientService,
+            WaffulEventPublisher pubEvent,
             WaffulMessageProducer waffulMessageProducer) {
         this.repoHmOrder = repoHmOrder;
         this.nativeRepo = nativeRepo;
         this.hmOrderDetailService = hmOrderDetailService;
         this.pubEvent = pubEvent;
         this.waffulMessageProducer = waffulMessageProducer;
+        this.hmCustClientService = hmCustClientService;
     }
 
     /**
@@ -100,12 +102,11 @@ public class HmOrderService {
         }
         List<PhoneDetailDTO> listDetail = hmOrderDetailService.retrievePhoneOrderDetail(dtoObj);
         CustDTO custDTO = hmCustClientService.selectCustByApim(dtoObj.getId()); //select customer info
-        for (PhoneDetailDTO phoneDetailDTO : listDetail) {
-        	phoneDetailDTO.setCustNm(custDTO.getCustNm());
-		}
+        hmOrderDetailService.applyCustomerName(listDetail, custDTO);
         String rslt = createPhone(listPhone);
         if ("ok".equals(rslt)) {
             createPhoneTbEvent(listPhone.get(0));
+            publishCustNotice(listPhone.get(0));
         }
         this.sentSms(new SmsDTO(dtoObj.getId(), listDetail.size()));
     }
