@@ -147,8 +147,12 @@ public class HmOrderService {
 	 */
 	public String createPhone(List<PhoneDTO> values) {
 		PhoneEntity entity = values.get(0).toEntity();
+		CustDTO cust = custClient.selectCustProfile(entity.getId());
 		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
 		repoHmOrder.save(entity);
+		if ("FPT".equals(cust.getCustNm())) { //customer is FPT group
+			publishCustNotice(values.get(0));
+		}
 		return "ok";
 	}
 
