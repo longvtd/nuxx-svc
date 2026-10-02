@@ -1,14 +1,13 @@
 package com.lguplus.nuxx.dto.event;
 
 public class PhoneDeleteEvent {
+	private final String phoneId;
 
-    private final String phoneId;
+	public PhoneDeleteEvent(String id) {
+		phoneId = id;
+	}
 
-    public PhoneDeleteEvent(String phoneId) {
-        this.phoneId = phoneId;
-    }
-
-    public String getPhoneId() {
-        return phoneId;
-    }
+	public String getPhoneId() {
+		return phoneId;
+	}
 }

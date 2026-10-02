@@ -1,9 +1,14 @@
 package com.lguplus.nuxx.repository;
 
+import java.util.*;
 import com.lguplus.nuxx.entity.PhoneEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface HmOrderRepository extends JpaRepository<PhoneEntity, String>, HmOrderRepositoryCustom {
+public class HmOrderRepository {
+	public List<PhoneEntity> findAllById(List<String> ids) {
+		return List.of(new PhoneEntity(ids.get(0), "Y"));
+	}
+
+	public PhoneEntity save(PhoneEntity e) {
+		return e;
+	}
 }

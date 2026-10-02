@@ -1,0 +1,1 @@
+package com.lguplus.wafful.event; public class WaffullEventDispatcherFactory { public WaffulEventDispatcher make(String group,DomainEventHandlers handlers){return new WaffulEventDispatcher();} }

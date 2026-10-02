@@ -1,27 +1,18 @@
 package com.lguplus.nuxx.entity;
 
-import com.lguplus.wafful.jpa.Audit;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+public class PhoneDetailEntity {
+	private final String id, phoneId;
 
-@Entity
-@Table(name = "tb_hm_phone_d")
-public class PhoneDetailEntity extends Audit {
+	public PhoneDetailEntity(String id, String phoneId) {
+		this.id = id;
+		this.phoneId = phoneId;
+	}
 
-    @Id
-    @Column(name = "phone_dtl_id")
-    private String id; //휴대폰 주문 상세 ID
+	public String getId() {
+		return id;
+	}
 
-    @Column(name = "phone_id")
-    private String phoneId; //휴대폰 주문 ID
-
-    public String getId() {
-        return id;
-    }
-
-    public String getPhoneId() {
-        return phoneId;
-    }
+	public String getPhoneId() {
+		return phoneId;
+	}
 }

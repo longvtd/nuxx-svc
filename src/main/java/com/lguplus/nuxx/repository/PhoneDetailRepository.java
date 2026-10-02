@@ -1,12 +1,10 @@
 package com.lguplus.nuxx.repository;
 
+import java.util.*;
 import com.lguplus.nuxx.entity.PhoneDetailEntity;
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface PhoneDetailRepository extends JpaRepository<PhoneDetailEntity, String> {
-
-    List<PhoneDetailEntity> findByPhoneId(String phoneId);
+public class PhoneDetailRepository {
+	public List<PhoneDetailEntity> findByPhoneId(String id) {
+		return List.of(new PhoneDetailEntity("D-1", id));
+	}
 }

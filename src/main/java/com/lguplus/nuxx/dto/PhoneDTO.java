@@ -1,36 +1,33 @@
 package com.lguplus.nuxx.dto;
 
+import java.util.*;
 import com.lguplus.nuxx.entity.PhoneEntity;
-import com.lguplus.wafful.vo.BaseVO;
-import java.util.ArrayList;
-import java.util.List;
 
-public class PhoneDTO extends BaseVO {
+public class PhoneDTO {
+	private final String id;
+	private final String useYn;
 
-    private String id;
-    private String useYn;
+	public PhoneDTO(String id, String useYn) {
+		this.id = id;
+		this.useYn = useYn;
+	}
 
-    public PhoneDTO(String id, String useYn) {
-        this.id = id;
-        this.useYn = useYn;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getUseYn() {
+		return useYn;
+	}
 
-    public PhoneEntity toEntity() {
-        PhoneEntity entity = new PhoneEntity();
-        entity.setId(id);
-        entity.setUseYn(useYn);
-        return entity;
-    }
+	public PhoneEntity toEntity() {
+		return new PhoneEntity(id, useYn);
+	}
 
-    public static List<PhoneDTO> fromEntities(List<PhoneEntity> entities) {
-        List<PhoneDTO> result = new ArrayList<>();
-        for (PhoneEntity entity : entities) {
-            result.add(new PhoneDTO(entity.getId(), entity.getUseYn()));
-        }
-        return result;
-    }
+	public static List<PhoneDTO> fromEntities(List<PhoneEntity> es) {
+		List<PhoneDTO> r = new ArrayList<>();
+		for (PhoneEntity e : es)
+			r.add(new PhoneDTO(e.getId(), e.getUseYn()));
+		return r;
+	}
 }

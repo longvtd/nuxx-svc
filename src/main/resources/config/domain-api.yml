@@ -1,45 +1,42 @@
-#Domain 01
 NUXY-SVC:
-  api-selectUser-001: #Select user by id (V2, D1, R1 custom field, C1 uppercase)
+  api-selectUser-001:
     url: /selectUser/{userId}
-  api-selectUserList-001: #Select user list - check (V4, V5 sample goc)
+  api-selectUserList-001:
     url: /selectUser
-  api-selectUserList-002: #Select user list v2 (I1 target)
+  api-selectUserList-002:
     url: /v2/selectUser
-  api-selectUserLiteral-001: #Select user literal (V1)
+  api-selectUserLiteral-001:
     url: /selectUserLiteral/{userId}
-  api-selectUserFqn-001: #Select user FQN (V3)
+  api-selectUserFqn-001:
     url: /selectUserFqn/{userId}
-  api-selectUserWildcard-001: #Select user wildcard static import (V5)
+  api-selectUserWildcard-001:
     url: /selectUserWildcard/{userId}
-  api-selectUserLocal-001: #Select user private local constant (V6)
+  api-selectUserLocal-001:
     url: /selectUserLocal/{userId}
-  api-selectUserLocalPublic-001: #Select user public local constant (V6)
+  api-selectUserLocalPublic-001:
     url: /selectUserLocalPublic/{userId}
-  api-selectUserIface-001: #Select user interface constant (V7a)
+  api-selectUserIface-001:
     url: /selectUserIface/{userId}
-  api-selectUserParent-001: #Select user parent constant (V7b)
+  api-selectUserParent-001:
     url: /selectUserParent/{userId}
-  api-selectUserChain-001: #Select user chained constant (V8)
+  api-selectUserChain-001:
     url: /selectUserChain/{userId}
-  api-selectUserChain-002: #Select user chained constant v2 (I3 target)
+  api-selectUserChain-002:
     url: /v2/selectUserChain/{userId}
-  api-selectUserNotFinal-001: #NEGATIVE N4 - must NOT be linked
+  api-selectUserNotFinal-001:
     url: /selectUserNotFinal/{userId}
-  api-selectPoint-001: #Select point
+  api-selectPoint-001:
     url: /selectPoint/{custId}
-  api-selectCust-001: #Select customer by id
+  api-selectCust-001:
     url: /selectCust/{custId}
   api-selectCustList-001:
     url: /selectCust
-  saveCust-001: #Save customer (apiId without api- prefix)
+  saveCust-001:
     url: /saveCust
-#Domain registered only in domain-api.yml (missing in domain.yml)
-#Domain 02
 NUXZ-SVC:
-  selectCust-001: #Select customer by id (R1 ApimRestTemplate)
+  selectCust-001:
     url: /selectCust/{custId}
-  selectCustList-001: #Select customer list (DO-02 no-hyphen id, R1)
+  selectCustList-001:
     url: /selectCust
-  api-selectPoint-001: #Select point
+  api-selectPoint-001:
     url: /selectPoint/{custId}

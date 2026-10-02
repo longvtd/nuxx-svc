@@ -1,16 +1,16 @@
 package com.lguplus.nuxx.dto;
 
-import com.lguplus.wafful.vo.BaseVO;
+public class PhoneReqDTO {
+	private String id;
 
-public class PhoneReqDTO extends BaseVO {
+	public PhoneReqDTO() {
+	}
 
-    private String id;
+	public PhoneReqDTO(String id) {
+		this.id = id;
+	}
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+	public String getId() {
+		return id;
+	}
 }

@@ -1,0 +1,1 @@
+package com.lguplus.wafful.event; import java.util.function.Consumer; public class DomainEventHandlersBuilder { public static DomainEventHandlersBuilder forAggregateType(String t){return new DomainEventHandlersBuilder();} public <T> DomainEventHandlersBuilder onEvent(Class<T> c,Consumer<T> h){return this;} public DomainEventHandlers build(){return new DomainEventHandlers();} }

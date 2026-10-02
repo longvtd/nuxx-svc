@@ -1,71 +1,31 @@
 package com.lguplus.nuxx.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
 import org.springframework.stereotype.Service;
-
-import com.lguplus.nuxx.dto.CustDTO;
-import com.lguplus.nuxx.dto.PhoneDetailDTO;
-import com.lguplus.nuxx.dto.PhoneReqDTO;
+import com.lguplus.nuxx.dto.*;
 import com.lguplus.nuxx.entity.PhoneDetailEntity;
 import com.lguplus.nuxx.repository.PhoneDetailRepository;
 
-/**
- * @name: Home order detail Service
- * <PRE>
- * 홈주문 휴대폰 주문 상세 서비스
- * </PRE>
- * @author: Tester (tester@example.local)
- * @class  : HmOrderDetailService.java
- * @Date   : 2026. 10. 01.
- * @History
- * <PRE>
- * No    Date              time             Author              Desc
- *----   ----------------- ---------------- -----------------   ----------
- *     1.  2026. 10. 01.   09:00:00.        Tester.             Initial creation
- * </PRE>
- */
+/** @name: Home order detail Service */
 @Service
 public class HmOrderDetailService {
+	private final PhoneDetailRepository detailRepo;
 
-    private final PhoneDetailRepository detailRepo;
+	public HmOrderDetailService(PhoneDetailRepository r) {
+		detailRepo = r;
+	}
 
-    public HmOrderDetailService(PhoneDetailRepository detailRepo) {
-        this.detailRepo = detailRepo;
-    }
+	/** @name: 휴대폰주문상세조회 */
+	public List<PhoneDetailDTO> retrievePhoneOrderDetail(PhoneReqDTO req) {
+		List<PhoneDetailDTO> out = new ArrayList<>();
+		for (PhoneDetailEntity e : detailRepo.findByPhoneId(req.getId()))
+			out.add(new PhoneDetailDTO(e.getId(), e.getPhoneId()));
+		return out;
+	}
 
-    /**
-     * @name: 휴대폰주문상세조회
-     * <PRE>
-     * 휴대폰 주문 상세 목록 조회
-     * </PRE>
-     * @MethodName: retrievePhoneOrderDetail
-     * @Part: 차세대 아키텍처
-     * @author: Tester (tester@example.local)
-     * @ModifiedDate: 2026. 10. 01. 09:00:00
-     */
-    public List<PhoneDetailDTO> retrievePhoneOrderDetail(PhoneReqDTO dtoObj) {
-        List<PhoneDetailDTO> result = new ArrayList<>();
-        for (PhoneDetailEntity entity : detailRepo.findByPhoneId(dtoObj.getId())) {
-            result.add(new PhoneDetailDTO(entity.getId(), entity.getPhoneId()));
-        }
-        return result;
-    }
-    
-    /**
-     * @name: 주문상세고객정보반영
-     * <PRE>
-     * 조회된 고객명을 휴대폰 주문 상세 목록에 반영
-     * </PRE>
-     * @MethodName: applyCustomerName
-     * @Part: 차세대 아키텍처
-     * @author: Tester (tester@example.local)
-     * @ModifiedDate: 2026. 10. 02. 19:30:00
-     */
-    public void applyCustomerName(List<PhoneDetailDTO> details, CustDTO customer) {
-        for (PhoneDetailDTO detail : details) {
-            detail.setCustNm(customer.getCustNm());
-        }
-    }
+	/** @name: 주문상세고객정보반영 */
+	public void applyCustomerName(List<PhoneDetailDTO> details, CustDTO customer) {
+		for (PhoneDetailDTO d : details)
+			d.setCustNm(customer.getCustNm());
+	}
 }

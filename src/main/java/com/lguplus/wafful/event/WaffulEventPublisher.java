@@ -1,0 +1,1 @@
+package com.lguplus.wafful.event; public class WaffulEventPublisher { public void publish(String topic,String key,Object event){} }

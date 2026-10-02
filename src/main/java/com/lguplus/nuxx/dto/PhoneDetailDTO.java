@@ -1,26 +1,28 @@
 package com.lguplus.nuxx.dto;
 
-import com.lguplus.wafful.vo.BaseVO;
+public class PhoneDetailDTO {
+	private String id;
+	private String phoneId;
+	private String custNm;
 
-public class PhoneDetailDTO extends BaseVO {
+	public PhoneDetailDTO(String id, String phoneId) {
+		this.id = id;
+		this.phoneId = phoneId;
+	}
 
-    private final String id;
-    private final String phoneId;
-    private final String custNm;
+	public String getId() {
+		return id;
+	}
 
-    public PhoneDetailDTO(String id, String phoneId) {
-        this.id = id;
-        this.phoneId = phoneId;
-    }
+	public String getPhoneId() {
+		return phoneId;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getCustNm() {
+		return custNm;
+	}
 
-    public String getPhoneId() {
-        return phoneId;
-    }
-    public void setCustNm(String custNm) {
-        this.custNm = custNm;
-    }
+	public void setCustNm(String name) {
+		custNm = name;
+	}
 }

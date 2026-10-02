@@ -1,5 +1,4 @@
 service:
-  ##APIM
   apim:
     url: https://openapi.lg...
   apim-pv:
@@ -8,12 +7,9 @@ service:
     url: https://openapi.lg...
 amdocs:
   url: https://openapi.lg...
-#Domain 01
 NUXY-SVC:
   url: https://domain01.com
-#Domain 02
 NUXZ-SVC:
   url: https://domain02.com
-#Domain 03
 NUXA-SVC:
   url: https://domain03.com

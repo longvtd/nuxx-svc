@@ -1,0 +1,1 @@
+package com.lguplus.wafful.message; public class WaffulMessageProducer { public void send(String topic,String key,Object message){} }
