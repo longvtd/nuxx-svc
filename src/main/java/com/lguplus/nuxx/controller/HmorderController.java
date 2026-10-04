@@ -130,4 +130,23 @@ public class HmorderController {
 	public String changePhone(@ParameterObject PhoneReqDTO q) {
 		return service.changePhone(service.retrievePhone(q));
 	}
+	
+	/**
+	 * @name: Create new order detail phone
+	 * <PRE>
+	 * Create new order detail phone
+	 * </PRE>
+	 * @MethodName: savePhoneDetail
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 02. 21:00:00
+	 */
+	@Operation(
+	    summary = "Create new order detail phone",
+	    description = "Create new order detail phone"
+	)
+	@PostMapping("/phone/v1/createOrderDetail")
+	public void savePhoneDetail(@ParameterObject List<PhoneDTO> q) {
+		service.createOrderDetail(q);
+	}
 }
