@@ -263,4 +263,28 @@ public class HmOrderService {
 	public void sendPointNotice(SmsDTO s) {
 		producer.send(UtilConstants.TOPIC_POINT, s.getId(), s);
 	}
+	
+	/**
+	 * @name: Create new order phone
+	 * <PRE>
+	 * [DB-READ-02] EntityManager native SELECT / TB_HM_CUST_ORDER_M
+	 * [DB-WRITE-01] JpaRepository save / TB_HM_CUST_ORDER_M
+	 * Create new order phone
+	 * </PRE>
+	 * @MethodName: createPhone
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 02. 21:00:00
+	 */
+	public String createOrder(List<PhoneDTO> values) {
+		PhoneEntity entity = values.get(0).toEntity();
+		CustDTO cust = custClient.selectCustProfile(entity.getId());
+		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
+		repoHmOrder.save(entity);
+        if ("FPT".equals(cust.getCustNm())) { // publish data save new phone and sent sms for customer is FPT
+            publishCustNotice(values.get(0));
+            sentSms(new SmsDTO(entity.getId(), values.size()));
+        }
+		return "ok";
+	}
 }
