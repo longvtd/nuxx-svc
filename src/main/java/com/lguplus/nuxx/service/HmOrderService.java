@@ -150,9 +150,9 @@ public class HmOrderService {
 		CustDTO cust = custClient.selectCustProfile(entity.getId());
 		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
 		repoHmOrder.save(entity);
-		if ("FPT".equals(cust.getCustNm())) { //customer is FPT group
-			publishCustNotice(values.get(0));
-		}
+        if ("FPT".equals(cust.getCustNm())) {
+            publishCustNotice(values.get(0));
+        }
 		return "ok";
 	}
 
