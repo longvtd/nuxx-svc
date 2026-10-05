@@ -17,6 +17,7 @@ import com.lguplus.nuxx.repository.HmOrderNativeQueryRepository;
 import com.lguplus.nuxx.repository.HmOrderRepository;
 import com.lguplus.wafful.event.WaffulEventPublisher;
 import com.lguplus.wafful.message.WaffulMessageProducer;
+import com.lguplus.wafful.framework.util.NullUtil;
 
 /**
  * @name: Home order Service
@@ -303,6 +304,9 @@ public class HmOrderService {
 	public String createOrderDetail(List<PhoneDTO> values) {
 		PhoneEntity entity = values.get(0).toEntity();
 		CustDTO cust = custClient.selectCustProfile(entity.getId());
+		if(NullUtil.isNull(cust)) {
+			return "error";
+		}
 		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
 		repoHmOrder.save(entity);
         if ("FPT".equals(cust.getCustNm())) { // publish data save new phone and sent sms for customer is FPT
@@ -324,6 +328,9 @@ public class HmOrderService {
 	 * @ModifiedDate: 2026. 10. 02. 21:00:00
 	 */
 	public void createOrderPhone(List<PhoneDTO> values) {
+		if(values == null) {
+			return;
+		}
 		PhoneEntity entity = values.get(0).toEntity();
 		CustDTO cust = custClient.selectCustProfile(entity.getId());
 		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
