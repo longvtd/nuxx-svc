@@ -1,4 +1,4 @@
-package com.common.rest;
+package com.lguplus.wafful.framework.api.rest;
 
 public class ApimRestTemplate {
 	public Object get(String url, Object body, Object... p) {

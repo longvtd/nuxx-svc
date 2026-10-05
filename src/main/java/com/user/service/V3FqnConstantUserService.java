@@ -1,13 +1,13 @@
 package com.user.service;
 
-import com.common.rest.WaffulRestTemplete;
+import com.lguplus.wafful.framework.api.rest.WaffulRestTemplate;
 import com.user.dto.*;
 import java.util.*;
 
 public class V3FqnConstantUserService {
-	private final WaffulRestTemplete restTemplate;
+	private final WaffulRestTemplate restTemplate;
 
-	public V3FqnConstantUserService(WaffulRestTemplete r) {
+	public V3FqnConstantUserService(WaffulRestTemplate r) {
 		restTemplate = r;
 	}
 

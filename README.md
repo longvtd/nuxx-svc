@@ -8,7 +8,7 @@ Compile-ready Java 17 sample based on the supplied NUXx service examples. No net
 
 ## Baseline coverage
 - Controller -> Order service -> Detail/customer services.
-- Direct and contextual outbound API through WaffulRestTemplete/ApimRestTemplate.
+- Direct and contextual outbound API through WaffulRestTemplate/ApimRestTemplate.
 - Literal, local variable, same-class constant, other-class constant, FQN constant, uppercase domain, invalid API/domain, dynamic/concatenated/mutable URL and false-positive CustomHttpHelper.
 - Kafka publish/send and subscriber handlers.
 - Repository reads/writes, overloads, constructor identity, DTO/entity calls and method-level Korean `@name` comments.

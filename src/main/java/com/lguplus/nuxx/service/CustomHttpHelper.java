@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
  * @name: Custom HTTP helper
  * <PRE>
  * 비대상 HTTP 도우미.
- * WaffulRestTemplete 및 ApimRestTemplate이 아니므로 External API로 추출되지 않아야 합니다.
+ * WaffulRestTemplate 및 ApimRestTemplate이 아니므로 External API로 추출되지 않아야 합니다.
  * </PRE>
  * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
  * @class  : CustomHttpHelper.java
@@ -23,7 +23,7 @@ public class CustomHttpHelper {
 	/**
 	 * @name: 비대상HTTP POST
 	 * <PRE>
-	 * [OUT-F01] CustomHttpHelper is not WaffulRestTemplete or ApimRestTemplate
+	 * [OUT-F01] CustomHttpHelper is not WaffulRestTemplate or ApimRestTemplate
 	 * URL과 파라미터를 결합한 문자열을 반환합니다.
 	 * </PRE>
 	 * @MethodName: post
@@ -38,7 +38,7 @@ public class CustomHttpHelper {
 	/**
 	 * @name: 비대상HTTP GET
 	 * <PRE>
-	 * [OUT-F01] CustomHttpHelper is not WaffulRestTemplete or ApimRestTemplate
+	 * [OUT-F01] CustomHttpHelper is not WaffulRestTemplate or ApimRestTemplate
 	 * URL과 파라미터를 결합한 문자열을 반환합니다.
 	 * </PRE>
 	 * @MethodName: get

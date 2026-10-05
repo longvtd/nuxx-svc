@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.common.rest.ApimRestTemplate;
-import com.common.rest.WaffulRestTemplete;
+import com.lguplus.wafful.framework.api.rest.ApimRestTemplate;
+import com.lguplus.wafful.framework.api.rest.WaffulRestTemplate;
 import com.lguplus.nuxx.common.ApiUrlConstants;
 import com.lguplus.nuxx.dto.CustDTO;
 
@@ -28,7 +28,7 @@ import com.lguplus.nuxx.dto.CustDTO;
 @Service
 public class HmCustClientService {
 	private static final String URL_SELECT_CUST_LIST = "{@nuxy-svc.api-selectCustList-001}";
-	private final WaffulRestTemplete restTemplate;
+	private final WaffulRestTemplate restTemplate;
 	private final ApimRestTemplate apimRestTemplate;
 	private final CustomHttpHelper httpHelper;
 	private String sUrl = "{@nuxy-svc.api-selectCust-001}";
@@ -43,7 +43,7 @@ public class HmCustClientService {
 	 * @author: Tester (tester@example.local)
 	 * @ModifiedDate: 2026. 10. 01. 09:00:00
 	 */
-	public HmCustClientService(WaffulRestTemplete r, ApimRestTemplate a, CustomHttpHelper h) {
+	public HmCustClientService(WaffulRestTemplate r, ApimRestTemplate a, CustomHttpHelper h) {
 		restTemplate = r;
 		apimRestTemplate = a;
 		httpHelper = h;
@@ -272,7 +272,7 @@ public class HmCustClientService {
 	/**
 	 * @name: 비대상HTTP도우미호출
 	 * <PRE>
-	 * [OUT-F01] CustomHttpHelper is not WaffulRestTemplete or ApimRestTemplate
+	 * [OUT-F01] CustomHttpHelper is not WaffulRestTemplate or ApimRestTemplate
 	 * </PRE>
 	 * @MethodName: callHelper
 	 * @Part: 차세대 아키텍처
