@@ -33,6 +33,11 @@ NUXY-SVC:
     url: /selectCust
   saveCust-001:
     url: /saveCust
+  api-createInvoice-001:
+    url: /createInvoice/{invoiceId}
+  api-requestPayment-001:
+    url: /requestPayment/{paymentId}
+
 NUXZ-SVC:
   selectCust-001:
     url: /selectCust/{custId}
