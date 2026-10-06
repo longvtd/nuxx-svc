@@ -35,7 +35,8 @@ NUXY-SVC:
     url: /saveCust
   api-requestRefund-001:
     url: /requestRefund/{refundId}
-
+  api-createInvoice-001:
+    url: /createInvoice/{invoiceId}
 NUXZ-SVC:
   selectCust-001:
     url: /selectCust/{custId}

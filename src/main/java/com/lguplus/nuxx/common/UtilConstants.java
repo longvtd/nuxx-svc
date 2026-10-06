@@ -33,7 +33,7 @@ public final class UtilConstants {
 	public static final String TOPIC_PHONE_TB = "to_nuxx_phone_event"; //import data phone to home phone
 	public static final String TOPIC_SMS = "to_nuxa_sms_event";  //sent sms to home contact
 	public static final String TOPIC_CUST = "to_nuxy_cust_event"; //...
-	public static final String TOPIC_INVOICE = "to_nuxx_invoice_event"; //invoice creation event
+	public static final String TOPIC_INVOICE = "to_nuxi_invoice_event"; //invoice creation event
 	public static final String TOPIC_PAYMENT_REQUESTED = "to_nuxx_payment_requested_event"; //payment request event
 	public static final String TOPIC_POINT = "to_zzzz_point_event";
 	public static final String GROUP_TOPIC_ORDER = "nuxx_order_group";
