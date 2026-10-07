@@ -57,4 +57,17 @@ public class InvoiceController {
 		return invoiceService.createInvoice(request);
 	}
 	
+	/**
+	 * @name: 청구서생성요청 iphone
+	 * <PRE>iphone - 고객 식별자와 금액으로 청구서를 생성하고 저장합니다.</PRE>
+	 * @MethodName: createInvoiceIphone
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 05. 21:00:00
+	 */
+	@Operation(summary = "청구서생성-iphone", description = "iphone 고객 청구서를 생성합니다.")
+	@PostMapping("/create-invoice-iphone")
+	public InvoiceEntity createInvoiceIphone(@ParameterObject InvoiceReqDTO request) {
+		return invoiceService.createInvoiceIphone(request);
+	}
 }
