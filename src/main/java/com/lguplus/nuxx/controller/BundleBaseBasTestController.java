@@ -7,4 +7,9 @@ public class BundleBaseBasTestController {
     private final BundleBaseBasTestService service;
     public BundleBaseBasTestController(BundleBaseBasTestService service) { this.service=service; }
     public String oldMethod() { return service.oldMethod(); }
+
+    @PostMapping("/bundle/save")
+    public void saveBundleBaseM(com.lguplus.nuxx.dto.BundleBaseEntityDTO dto) {
+        service.saveBundleBaseM(dto);
+    }
 }
