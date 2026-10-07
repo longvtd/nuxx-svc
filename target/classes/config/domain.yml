@@ -13,3 +13,5 @@ NUXZ-SVC:
   url: https://domain02.com
 NUXA-SVC:
   url: https://domain03.com
+NUXB-SVC:
+  url: https://bundle.example.local
