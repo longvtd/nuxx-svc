@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lguplus.nuxx.common.UtilConstants;
 import com.lguplus.nuxx.dto.CustDTO;
 import com.lguplus.nuxx.dto.InvoiceReqDTO;
+import com.lguplus.nuxx.dto.RefundReqDTO;
 import com.lguplus.nuxx.entity.InvoiceEntity;
 import com.lguplus.nuxx.repository.InvoiceRepository;
 import com.lguplus.wafful.event.WaffulEventPublisher;
@@ -33,6 +34,7 @@ public class InvoiceService {
 	private final InvoiceRepository invoiceRepository;
 	private final WaffulRestTemplate restTemplate;
 	private final WaffulEventPublisher eventPublisher;
+	private final RefundService refundService;
 
 	/**
 	 * @name: 청구서서비스생성
@@ -43,10 +45,11 @@ public class InvoiceService {
 	 * @ModifiedDate: 2026. 10. 05. 21:00:00
 	 */
 	public InvoiceService(InvoiceRepository invoiceRepository, WaffulRestTemplate restTemplate,
-	        WaffulEventPublisher eventPublisher) {
+	        WaffulEventPublisher eventPublisher, RefundService refundService) {
 		this.invoiceRepository = invoiceRepository;
 		this.restTemplate = restTemplate;
 		this.eventPublisher = eventPublisher;
+		this.refundService = refundService;
 	}
 
 	/**
@@ -74,7 +77,32 @@ public class InvoiceService {
 		        request.getAmount(), "CREATED", LocalDateTime.now());
 		InvoiceEntity savedInvoice = invoiceRepository.save(invoice);
 		eventPublisher.publish(UtilConstants.TOPIC_INVOICE, savedInvoice.getInvoiceId(), savedInvoice);
-		restTemplate.post("{@nuxy-svc.api-createInvoice-001}", savedInvoice, savedInvoice.getInvoiceId());
+
+		RefundReqDTO reqDto = (RefundReqDTO) restTemplate.post("{@nuxy-svc.api-createInvoice-001}", savedInvoice, savedInvoice.getInvoiceId());
+		validateRefundRequest(reqDto);
+		refundService.createRefund(reqDto);
+		
 		return savedInvoice;
 	}
+	
+	/**
+     * @name: 환불요청검증
+     * <PRE>필수 식별자와 양수의 환불 금액을 검증합니다.</PRE>
+     * @MethodName: validateRequest
+     * @Part: 차세대 아키텍처
+     */
+    private void validateRefundRequest(RefundReqDTO request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Refund request is required");
+        }
+        if (request.getPaymentId() == null || request.getPaymentId().isBlank()) {
+            throw new IllegalArgumentException("Payment ID is required");
+        }
+        if (request.getCustomerId() == null || request.getCustomerId().isBlank()) {
+            throw new IllegalArgumentException("Customer ID is required");
+        }
+        if (request.getRefundAmount() == null || request.getRefundAmount().signum() <= 0) {
+            throw new IllegalArgumentException("Refund amount must be positive");
+        }
+    }
 }
