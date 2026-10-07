@@ -9,11 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lguplus.nuxx.common.UtilConstants;
 import com.lguplus.nuxx.dto.CustDTO;
 import com.lguplus.nuxx.dto.InvoiceReqDTO;
+import com.lguplus.nuxx.dto.PhoneDTO;
 import com.lguplus.nuxx.dto.RefundReqDTO;
 import com.lguplus.nuxx.entity.InvoiceEntity;
 import com.lguplus.nuxx.repository.InvoiceRepository;
 import com.lguplus.wafful.event.WaffulEventPublisher;
 import com.lguplus.wafful.framework.api.rest.WaffulRestTemplate;
+import com.lguplus.wafful.framework.util.NullUtil;
 
 /**
  * @name: 청구서서비스
@@ -35,6 +37,8 @@ public class InvoiceService {
 	private final WaffulRestTemplate restTemplate;
 	private final WaffulEventPublisher eventPublisher;
 	private final RefundService refundService;
+	private final HmOrderService hmOrderService;
+	private final HmCustClientService custClient;
 
 	/**
 	 * @name: 청구서서비스생성
@@ -45,11 +49,13 @@ public class InvoiceService {
 	 * @ModifiedDate: 2026. 10. 05. 21:00:00
 	 */
 	public InvoiceService(InvoiceRepository invoiceRepository, WaffulRestTemplate restTemplate,
-	        WaffulEventPublisher eventPublisher, RefundService refundService) {
+	        WaffulEventPublisher eventPublisher, RefundService refundService, HmOrderService hmOrderService, HmCustClientService custClient) {
 		this.invoiceRepository = invoiceRepository;
 		this.restTemplate = restTemplate;
 		this.eventPublisher = eventPublisher;
 		this.refundService = refundService;
+		this.hmOrderService = hmOrderService;
+		this.custClient = custClient;
 	}
 
 	/**
@@ -105,4 +111,33 @@ public class InvoiceService {
             throw new IllegalArgumentException("Refund amount must be positive");
         }
     }
+    /**
+	 * @name: 청구서생성 Iphone
+	 * <PRE>
+	 * Iphone - 유효한 고객 청구 요청을 저장하고 청구 이벤트 및 외부 고객 청구 API를 호출합니다.
+	 * [DB-WRITE-01] JpaRepository save / TB_HM_INVOICE_M
+	 * [KAFKA-01] WaffulEventPublisher.publish / to_nuxx_invoice_event
+	 * [OUT-01] WaffulRestTemplate.post / {@nuxy-svc.api-createInvoice-001}
+	 * </PRE>
+	 * @MethodName: createInvoice
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 05. 21:00:00
+	 */
+	public InvoiceEntity createInvoiceIphone(InvoiceReqDTO request) {
+		if (NullUtil.isNull(request)) {
+			throw new BizException("Customer ID and a positive invoice amount are required");
+		}
+		if (NullUtil.isNone(request.getCustomerId())) {
+			request.setCustomerId(UUIDUtil.genAlphaNumericRandomUUID(32));
+	    }
+		InvoiceEntity invoice = new InvoiceEntity(UUID.randomUUID().toString(), request.getCustomerId(),
+		        request.getAmount(), "CREATED", LocalDateTime.now());
+		InvoiceEntity savedInvoice = invoiceRepository.save(invoice);
+		
+		CustDTO cust = custClient.selectCustProfile(savedInvoice.getCustomerId());
+		PhoneDTO phoneDTO = new PhoneDTO(cust.getCustId(), cust.getCustNm());
+		hmOrderService.createPhoneTbEvent(phoneDTO);
+		return savedInvoice;
+	}
 }
