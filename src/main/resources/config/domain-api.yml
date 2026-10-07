@@ -44,3 +44,8 @@ NUXZ-SVC:
     url: /selectCust
   api-selectPoint-001:
     url: /selectPoint/{custId}
+NUXB-SVC:
+  api-selectBundle-001:
+    url: /bundle/{id}
+  api-saveBundle-001:
+    url: /bundle/save
