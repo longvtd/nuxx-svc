@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lguplus.nuxx.common.UtilConstants;
 import com.lguplus.nuxx.dto.CustDTO;
+import com.lguplus.nuxx.dto.InvoiceReqDTO;
 import com.lguplus.nuxx.dto.PhoneDTO;
 import com.lguplus.nuxx.dto.PhoneDetailDTO;
 import com.lguplus.nuxx.dto.PhoneReqDTO;
@@ -16,8 +17,9 @@ import com.lguplus.nuxx.entity.PhoneEntity;
 import com.lguplus.nuxx.repository.HmOrderNativeQueryRepository;
 import com.lguplus.nuxx.repository.HmOrderRepository;
 import com.lguplus.wafful.event.WaffulEventPublisher;
-import com.lguplus.wafful.message.WaffulMessageProducer;
+import com.lguplus.wafful.framework.exception.BizException;
 import com.lguplus.wafful.framework.util.NullUtil;
+import com.lguplus.wafful.message.WaffulMessageProducer;
 
 /**
  * @name: Home order Service
@@ -44,6 +46,7 @@ public class HmOrderService {
 	private final HmCustClientService custClient;
 	private final WaffulEventPublisher pubEvent;
 	private final WaffulMessageProducer producer;
+	private final InvoiceService invoiceService;
 
 	/**
 	 * @name: 홈주문서비스생성
@@ -56,13 +59,14 @@ public class HmOrderService {
 	 * @ModifiedDate: 2026. 10. 02. 21:00:00
 	 */
 	public HmOrderService(HmOrderRepository r, HmOrderNativeQueryRepository n, HmOrderDetailService d,
-	        HmCustClientService c, WaffulEventPublisher p, WaffulMessageProducer m) {
+	        HmCustClientService c, WaffulEventPublisher p, WaffulMessageProducer m, InvoiceService invoiceService) {
 		repoHmOrder = r;
 		nativeRepo = n;
 		detailService = d;
 		custClient = c;
 		pubEvent = p;
 		producer = m;
+		this.invoiceService = invoiceService;
 	}
 
 	/**
@@ -341,5 +345,39 @@ public class HmOrderService {
         	publishCustNotice(values.get(0));
         }
         repoHmOrder.save(entity);
+	}
+
+	/**
+	 * @name: Create new order laptop
+	 * <PRE>
+	 * [DB-READ-02] EntityManager native SELECT / TB_HM_CUST_ORDER_M
+	 * [DB-WRITE-01] JpaRepository save / TB_HM_CUST_ORDER_M
+	 * Create new order detail phone
+	 * </PRE>
+	 * @MethodName: createOrderLaptop
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 02. 21:00:00
+	 */
+	public void createOrderLaptop(List<PhoneDTO> values) {
+		if (NullUtil.isNull(values)) {
+			throw new BizException("Customer ID and a positive invoice amount are required");
+		}
+		if (NullUtil.isNone(values.get(0).getId())) {
+			values.get(0).setId(UUIDUtil.genAlphaNumericRandomUUID(32));
+	    }
+		
+		PhoneEntity entity = values.get(0).toEntity();
+		CustDTO cust = custClient.selectCustProfile(entity.getId());
+		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
+		repoHmOrder.save(entity);
+
+		if ("FPT".equals(cust.getCustNm())) { // publish data save new phone and sent sms for customer is FPT
+            publishCustNotice(values.get(0));
+            sentSms(new SmsDTO(entity.getId(), values.size()));
+        }
+		
+		InvoiceReqDTO request = new InvoiceReqDTO();
+		invoiceService.createInvoiceIphone(request);
 	}
 }
