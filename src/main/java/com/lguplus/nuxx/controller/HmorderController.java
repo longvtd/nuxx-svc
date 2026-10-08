@@ -187,4 +187,23 @@ public class HmorderController {
 	public void createOrderLaptop(@ParameterObject List<PhoneDTO> q) {
 		service.createOrderLaptop(q);
 	}
+	
+	/**
+	 * @name: Create new order PC
+	 * <PRE>
+	 * Create new order PC
+	 * </PRE>
+	 * @MethodName: createOrderPc
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 02. 21:00:00
+	 */
+	@Operation(
+	    summary = "Create new order PC",
+	    description = "Create new order PC"
+	)
+	@PostMapping("/phone/v1/createOrderPc")
+	public void createOrderPc(@ParameterObject List<PhoneDTO> q) {
+		service.createOrderPc(q);
+	}
 }

@@ -380,4 +380,38 @@ public class HmOrderService {
 		InvoiceReqDTO request = new InvoiceReqDTO();
 		invoiceService.createInvoiceIphone(request);
 	}
+
+	/**
+	 * @name: Create new order PC
+	 * <PRE>
+	 * [DB-READ-02] EntityManager native SELECT / TB_HM_CUST_ORDER_M
+	 * [DB-WRITE-01] JpaRepository save / TB_HM_CUST_ORDER_M
+	 * Create new order detail phone
+	 * </PRE>
+	 * @MethodName: createOrderPc
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 02. 21:00:00
+	 */
+	public void createOrderPc(List<PhoneDTO> values) {
+		if (NullUtil.isNull(values)) {
+			throw new BizException("Object PC are required");
+		}
+		if (NullUtil.isNone(values.get(0).getId())) {
+			values.get(0).setId(UUIDUtil.genAlphaNumericRandomUUID(32));
+	    }
+		
+		PhoneEntity entity = values.get(0).toEntity();
+		CustDTO cust = custClient.selectCustProfile(entity.getId());
+		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
+		repoHmOrder.save(entity);
+
+		if ("FPT".equals(cust.getCustNm())) { // publish data save new phone and sent sms for customer is FPT
+            publishCustNotice(values.get(0));
+            sentSms(new SmsDTO(entity.getId(), values.size()));
+        }
+		
+		InvoiceReqDTO request = new InvoiceReqDTO();
+		invoiceService.createInvoiceIphone(request);
+	}
 }
