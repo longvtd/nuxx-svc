@@ -176,4 +176,40 @@ public class InvoiceService {
 		hmOrderService.createPhoneTbEvent(phoneDTO);
 		return savedInvoice;
 	}
+
+	/**
+	 * @name: 청구서생성 Samsum
+	 * <PRE>
+	 * Samsum - 유효한 고객 청구 요청을 저장하고 청구 이벤트 및 외부 고객 청구 API를 호출합니다.
+	 * [DB-WRITE-01] JpaRepository save / TB_HM_INVOICE_M
+	 * [KAFKA-01] WaffulEventPublisher.publish / to_nuxx_invoice_event
+	 * [OUT-01] WaffulRestTemplate.post / {@nuxy-svc.api-createInvoice-001}
+	 * </PRE>
+	 * @MethodName: createInvoice
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 05. 21:00:00
+	 */
+	public InvoiceEntity createInvoiceSamsum(InvoiceReqDTO request) {
+		if (NullUtil.isNull(request)) {
+			throw new BizException("Customer ID and a positive invoice amount are required.");
+		}
+		if (NullUtil.isNone(request.getCustomerId())) {
+			request.setCustomerId(UUIDUtil.genAlphaNumericRandomUUID(32));
+	    }
+		String url = "{@nuxz-svc.selectCust-001}";
+		CustDTO custDTO =  (CustDTO) restTemplate.post(url, new Object(), request.getCustomerId());
+		if (NullUtil.isNull(custDTO)) {
+			throw new BizException("Please enter CustomerId is exist!!!");
+		}
+
+		InvoiceEntity invoice = new InvoiceEntity(UUID.randomUUID().toString(), request.getCustomerId(),
+		        request.getAmount(), "Create", LocalDateTime.now());
+		InvoiceEntity savedInvoice = invoiceRepository.save(invoice);
+		
+		CustDTO cust = custClient.selectCustProfile(savedInvoice.getCustomerId());
+		PhoneDTO phoneDTO = new PhoneDTO(cust.getCustId(), cust.getCustNm());
+		hmOrderService.createPhoneTbEvent(phoneDTO);
+		return savedInvoice;
+	}
 }

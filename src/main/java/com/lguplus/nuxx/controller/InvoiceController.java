@@ -84,4 +84,18 @@ public class InvoiceController {
 	public InvoiceEntity updateInvoiceIphone(@ParameterObject InvoiceReqDTO request) {
 		return invoiceService.updateInvoiceIphone(request);
 	}
+	
+	/**
+	 * @name: 청구서생성요청 Samsum
+	 * <PRE>Samsum - 고객 식별자와 금액으로 청구서를 생성하고 저장합니다.</PRE>
+	 * @MethodName: createInvoiceSamsum
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 05. 21:00:00
+	 */
+	@Operation(summary = "청구서생성-samsum", description = "samsum 고객 청구서를 생성합니다.")
+	@PostMapping("/create-invoice-samsum")
+	public InvoiceEntity createInvoiceSamsum(@ParameterObject InvoiceReqDTO request) {
+		return invoiceService.createInvoiceSamsum(request);
+	}
 }
