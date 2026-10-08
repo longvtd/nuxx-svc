@@ -16,6 +16,7 @@ import com.lguplus.nuxx.repository.InvoiceRepository;
 import com.lguplus.wafful.event.WaffulEventPublisher;
 import com.lguplus.wafful.framework.api.rest.WaffulRestTemplate;
 import com.lguplus.wafful.framework.util.NullUtil;
+import com.lguplus.wafful.framework.exception.BizException;
 
 /**
  * @name: 청구서서비스
