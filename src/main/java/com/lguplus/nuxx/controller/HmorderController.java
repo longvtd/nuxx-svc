@@ -263,4 +263,23 @@ public class HmorderController {
 	public void createOrderTablet(@ParameterObject List<PhoneDTO> listTablet) {
 		service.createOrderTablet(listTablet);
 	}
+
+	/**
+	 * @name: Create bulk phone orders
+	 * <PRE>
+	 * 여러 휴대폰 주문의 일괄 생성을 서비스에 위임합니다.
+	 * </PRE>
+	 * @MethodName: createOrderBulk
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 08. 21:00:00
+	 */
+	@Operation(
+	    summary = "Create bulk phone orders",
+	    description = "여러 휴대폰 주문을 일괄 생성합니다."
+	)
+	@PostMapping("/phone/v1/createOrderBulk")
+	public void createOrderBulk(@ParameterObject List<PhoneDTO> values) {
+		service.createOrderBulk(values);
+	}
 }

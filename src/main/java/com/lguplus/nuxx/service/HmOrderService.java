@@ -1,6 +1,8 @@
 package com.lguplus.nuxx.service;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,7 @@ import com.lguplus.wafful.message.WaffulMessageProducer;
 @Service
 @Transactional
 public class HmOrderService {
+	private static final Logger LOGGER = Logger.getLogger(HmOrderService.class.getName());
 	private final HmOrderRepository repoHmOrder;
 	private final HmOrderNativeQueryRepository nativeRepo;
 	private final HmOrderDetailService detailService;
@@ -514,5 +517,98 @@ public class HmOrderService {
 		InvoiceReqDTO request = new InvoiceReqDTO();
 		invoiceService.createInvoiceIphone(request);
 		this.createOrderHeadPhone(listTablet);
+	}
+
+	/**
+	 * @name: Create bulk phone orders
+	 * <PRE>
+	 * 여러 휴대폰 주문을 고객 프로필 조회 후 저장하고 전체 처리가 끝난 뒤 주문 이벤트를 한 번 발행합니다.
+	 * </PRE>
+	 * @MethodName: createOrderBulk
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 08. 21:00:00
+	 */
+	public void createOrderBulk(List<PhoneDTO> values) {
+		if (NullUtil.isNull(values)) {
+			throw new BizException("Bulk phone orders are required");
+		}
+		for (PhoneDTO value : values) {
+			PhoneEntity entity = value.toEntity();
+			custClient.selectCustProfile(entity.getId());
+			entity.setName(nativeRepo.selectPhoneName(entity.getId()));
+			repoHmOrder.save(entity);
+		}
+		if (!values.isEmpty()) {
+			createPhoneTbEvent(values.get(0));
+		}
+	}
+
+	/**
+	 * @name: Create VIP phone order
+	 * <PRE>
+	 * VIP 고객의 다건 주문에 대해서만 고객 알림 이벤트를 발행합니다.
+	 * </PRE>
+	 * @MethodName: createOrderVip
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 08. 21:00:00
+	 */
+	public void createOrderVip(List<PhoneDTO> values) {
+		if (NullUtil.isNull(values)) {
+			throw new BizException("VIP phone orders are required");
+		} else {
+			if (values.isEmpty()) {
+				return;
+			}
+			CustDTO cust = custClient.selectCustProfile(values.get(0).getId());
+			if ("VIP".equals(cust.getCustNm())) {
+				if (values.size() > 1) {
+					publishCustNotice(values.get(0));
+				}
+			}
+		}
+	}
+
+	/**
+	 * @name: Create phone order safely
+	 * <PRE>
+	 * 고객 프로필 외부 조회 실패를 기록하고도 휴대폰 주문 저장을 계속합니다.
+	 * </PRE>
+	 * @MethodName: createOrderSafe
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 08. 21:00:00
+	 */
+	public void createOrderSafe(List<PhoneDTO> values) {
+		if (NullUtil.isNull(values) || values.isEmpty()) {
+			throw new BizException("Phone orders are required");
+		}
+		PhoneEntity entity = values.get(0).toEntity();
+		try {
+			custClient.selectCustProfile(entity.getId());
+		} catch (Exception exception) {
+			LOGGER.log(Level.WARNING, "Customer profile lookup failed for phone order " + entity.getId(),
+			        exception);
+		}
+		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
+		repoHmOrder.save(entity);
+	}
+
+	/**
+	 * @name: 휴대폰주문상세조회
+	 * <PRE>
+	 * 저장소 식별자 조회 후 native SELECT로 휴대폰 주문명을 읽어 반환합니다.
+	 * </PRE>
+	 * @MethodName: getOrderDetail
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 08. 21:00:00
+	 */
+	public String getOrderDetail(String id) {
+		if (repoHmOrder.findAllById(List.of(id)).isEmpty()) {
+			return null;
+		}
+		return nativeRepo.selectPhoneName(id);
 	}
 }
