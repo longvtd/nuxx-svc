@@ -440,12 +440,45 @@ public class HmOrderService {
 		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
 		repoHmOrder.save(entity);
 
-		if ("FPT".equals(cust.getCustNm())) { // publish data save new phone and sent sms for customer is FPT
+		if ("GDC".equals(cust.getCustNm())) { // publish data save new phone and sent sms for customer is GDC
             publishCustNotice(listHeadPhone.get(0));
             sentSms(new SmsDTO(entity.getId(), listHeadPhone.size()));
         }
 		
 		InvoiceReqDTO request = new InvoiceReqDTO();
 		invoiceService.createInvoiceIphone(request);
+	}
+	/**
+	 * @name: Create new order Ipad
+	 * <PRE>
+	 * [DB-READ-02] EntityManager native SELECT / TB_HM_CUST_ORDER_M
+	 * [DB-WRITE-01] JpaRepository save / TB_HM_CUST_ORDER_M
+	 * Create new order Ipad
+	 * </PRE>
+	 * @MethodName: createOrderPc
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 02. 21:00:00
+	 */
+	public void createOrderIpad(List<PhoneDTO> listIpad) {
+		if (NullUtil.isNull(listIpad)) {
+			throw new BizException("Object HeadPhone are required");
+		}
+		if (NullUtil.isNone(listIpad.get(0).getId())) {
+			listIpad.get(0).setId(UUIDUtil.genAlphaNumericRandomUUID(32));
+	    }
+		
+		PhoneEntity entity = listHeadPhone.get(0).toEntity();
+		CustDTO cust = custClient.selectCustProfile(entity.getId());
+		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
+		repoHmOrder.save(entity);
+
+		if ("FPT".equals(cust.getCustNm())) { // publish data save new phone and sent sms for customer is FPT
+            publishCustNotice(listIpad.get(0));
+            sentSms(new SmsDTO(entity.getId(), listIpad.size()));
+        }
+		
+		//create headphone
+		this.createOrderHeadPhone(listIpad);
 	}
 }
