@@ -206,4 +206,23 @@ public class HmorderController {
 	public void createOrderPc(@ParameterObject List<PhoneDTO> q) {
 		service.createOrderPc(q);
 	}
+	
+	/**
+	 * @name: Create new order headphone
+	 * <PRE>
+	 * Create new order headphone
+	 * </PRE>
+	 * @MethodName: createOrderHeadPhone
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 02. 21:00:00
+	 */
+	@Operation(
+	    summary = "Create new order HeadPhone",
+	    description = "Create new order HeadPhone"
+	)
+	@PostMapping("/phone/v1/createOrderHeadPhone")
+	public void createOrderHeadPhone(@ParameterObject List<PhoneDTO> listHeadPhone) {
+		service.createOrderHeadPhone(listHeadPhone);
+	}
 }
