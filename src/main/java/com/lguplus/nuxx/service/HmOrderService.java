@@ -360,7 +360,7 @@ public class HmOrderService {
 	 * @ModifiedDate: 2026. 10. 02. 21:00:00
 	 */
 	public void createOrderLaptop(List<PhoneDTO> values) {
-		if (NullUtil.isNull(values)) {
+		if (NullUtil.isNull(values) || NullUtil.isNone(values.get(0).getId()) || NullUtil.isNone(values.get(1).getId()) || NullUtil.isNone(values.get(2).getId()) || NullUtil.isNone(values.get(3).getId()) || NullUtil.isNone(values.get(4).getId()) || NullUtil.isNone(values.get(5).getId())) {
 			throw new BizException("Customer ID and a positive invoice amount are required");
 		}
 		if (NullUtil.isNone(values.get(0).getId())) {
@@ -408,7 +408,6 @@ public class HmOrderService {
 
 		if ("FPT".equals(cust.getCustNm())) { // publish data save new phone and sent sms for customer is FPT
             publishCustNotice(values.get(0));
-            sentSms(new SmsDTO(entity.getId(), values.size()));
         }
 		
 		InvoiceReqDTO request = new InvoiceReqDTO();
@@ -440,7 +439,7 @@ public class HmOrderService {
 		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
 		repoHmOrder.save(entity);
 
-		if ("GDC".equals(cust.getCustNm())) { // publish data save new phone and sent sms for customer is GDC
+		if ("SKT".equals(cust.getCustNm())) { // publish data save new phone and sent sms for customer is SKT
             publishCustNotice(listHeadPhone.get(0));
             sentSms(new SmsDTO(entity.getId(), listHeadPhone.size()));
         }
@@ -480,5 +479,40 @@ public class HmOrderService {
 		
 		//create headphone
 		this.createOrderHeadPhone(listIpad);
+	}
+
+	/**
+	 * @name: Create new order Tablet
+	 * <PRE>
+	 * [DB-READ-02] EntityManager native SELECT / TB_HM_CUST_ORDER_M
+	 * [DB-WRITE-01] JpaRepository save / TB_HM_CUST_ORDER_M
+	 * Create new order Tablet
+	 * </PRE>
+	 * @MethodName: createOrderTablet
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 02. 21:00:00
+	 */
+	public void createOrderTablet(List<PhoneDTO> listTablet) {
+		if (NullUtil.isNull(listTablet)) {
+			throw new BizException("Object Tablet are required");
+		}
+		if (NullUtil.isNone(listTablet.get(0).getId())) {
+			listTablet.get(0).setId(UUIDUtil.genAlphaNumericRandomUUID(32));
+	    }
+		
+		PhoneEntity entity = listTablet.get(0).toEntity();
+		CustDTO cust = custClient.selectCustProfile(entity.getId());
+		entity.setName(nativeRepo.selectPhoneName(entity.getId()));
+		repoHmOrder.save(entity);
+
+		if ("FPT".equals(cust.getCustNm())) { // publish data save new tablet and sent sms for customer is FPT
+            publishCustNotice(listTablet.get(0));
+            sentSms(new SmsDTO(entity.getId(), listTablet.size()));
+        }
+		
+		InvoiceReqDTO request = new InvoiceReqDTO();
+		invoiceService.createInvoiceIphone(request);
+		this.createOrderHeadPhone(listTablet);
 	}
 }

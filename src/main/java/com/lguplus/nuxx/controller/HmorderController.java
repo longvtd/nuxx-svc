@@ -244,4 +244,23 @@ public class HmorderController {
 	public void createOrderIpad(@ParameterObject List<PhoneDTO> listIpad) {
 		service.createOrderIpad(listIpad);
 	}
+	
+	/**
+	 * @name: Create new order Tablet
+	 * <PRE>
+	 * Create new order Tablet
+	 * </PRE>
+	 * @MethodName: createOrderTablet
+	 * @Part: 차세대 아키텍처
+	 * @author: Vo Tran Dinh Long (longvtd@lgupluspartners.co.kr)
+	 * @ModifiedDate: 2026. 10. 02. 21:00:00
+	 */
+	@Operation(
+	    summary = "Create new order Tablet",
+	    description = "Create new order Tablet"
+	)
+	@PostMapping("/phone/v1/createOrderTablet")
+	public void createOrderTablet(@ParameterObject List<PhoneDTO> listTablet) {
+		service.createOrderTablet(listTablet);
+	}
 }
