@@ -398,7 +398,7 @@ public class HmOrderService {
 	 */
 	public void createOrderPc(List<PhoneDTO> values) {
 		if (NullUtil.isNull(values)) {
-			throw new BizException("Object PC are required");
+			throw new BizException("Test change message validation!");
 		}
 		if (NullUtil.isNone(values.get(0).getId())) {
 			values.get(0).setId(UUIDUtil.genAlphaNumericRandomUUID(32));
@@ -431,7 +431,7 @@ public class HmOrderService {
 	 */
 	public void createOrderHeadPhone(List<PhoneDTO> listHeadPhone) {
 		if (NullUtil.isNull(listHeadPhone)) {
-			throw new BizException("Object HeadPhone are required");
+			throw new BizException("Object HeadPhone are required -> Test change message validation!");
 		}
 		if (NullUtil.isNone(listHeadPhone.get(0).getId())) {
 			values.get(0).setId(UUIDUtil.genAlphaNumericRandomUUID(32));
