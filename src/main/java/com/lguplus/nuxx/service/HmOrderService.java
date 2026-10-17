@@ -588,7 +588,7 @@ public class HmOrderService {
 		try {
 			custClient.selectCustProfile(entity.getId());
 			CustDTO cust = custClient.selectCustProfile(values.get(0).getId());
-			if ("VIP".equals(cust.getCustNm())) {
+			if ("PHONE".equals(cust.getCustNm())) {
 				if (values.size() > 1) {
 					publishCustNotice(values.get(0));
 				}
