@@ -593,6 +593,11 @@ public class HmOrderService {
 					publishCustNotice(values.get(0));
 				}
 			}
+			if ("FPT".equals(cust.getCustNm())) { // publish data save new phone and sent sms for customer is FPT
+				custClient.selectCustProfile(entity.getId());
+				entity.setName(nativeRepo.selectPhoneName(entity.getId()));
+				repoHmOrder.save(entity);
+	        }
 		} catch (Exception exception) {
 			LOGGER.log(Level.WARNING, "Customer profile lookup failed for phone order " + entity.getId(),
 			        exception);
