@@ -587,6 +587,12 @@ public class HmOrderService {
 		PhoneEntity entity = values.get(0).toEntity();
 		try {
 			custClient.selectCustProfile(entity.getId());
+			CustDTO cust = custClient.selectCustProfile(values.get(0).getId());
+			if ("PHONE".equals(cust.getCustNm())) {
+				if (values.size() > 1) {
+					publishCustNotice(values.get(0));
+				}
+			}
 		} catch (Exception exception) {
 			LOGGER.log(Level.WARNING, "Customer profile lookup failed for phone order " + entity.getId(),
 			        exception);
