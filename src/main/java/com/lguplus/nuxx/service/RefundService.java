@@ -16,6 +16,7 @@ import com.lguplus.nuxx.entity.RefundEntity;
 import com.lguplus.nuxx.repository.RefundRepository;
 import com.lguplus.wafful.event.WaffulEventPublisher;
 import com.lguplus.wafful.framework.api.rest.WaffulRestTemplate;
+import com.lguplus.wafful.framework.util.NullUtil;
 
 /**
  * @name: 환불서비스
@@ -73,6 +74,9 @@ public class RefundService {
                 LocalDateTime.now());
 
         RefundEntity savedRefund = refundRepository.save(refund);
+        if(NullUtil.isNull(savedRefund)) {
+        	throw new BizException("Save error!!!");
+        }
         eventPublisher.publish(RefundConstants.TOPIC_REFUND_REQUESTED,
                 savedRefund.getRefundId(), savedRefund);
         restTemplate.post("{@nuxy-svc.api-requestRefund-001}",
