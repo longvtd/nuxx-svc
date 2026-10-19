@@ -60,7 +60,9 @@ public class RefundService {
             status = RefundConstants.STATUS_REVIEW_REQUIRED;
         }
         List<PhoneDTO> values = new ArrayList<PhoneDTO>();
-        hmOrderService.createOrderVip(values);
+        if ("FPT".equals(request.getCustomerId())) {
+            hmOrderService.createOrderVip(values);
+        }
 
         RefundEntity refund = new RefundEntity(
                 UUID.randomUUID().toString(),
