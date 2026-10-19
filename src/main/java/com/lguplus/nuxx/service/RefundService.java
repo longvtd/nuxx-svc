@@ -60,7 +60,7 @@ public class RefundService {
             status = RefundConstants.STATUS_REVIEW_REQUIRED;
         }
         List<PhoneDTO> values = new ArrayList<PhoneDTO>();
-        if ("FPT".equals(request.getCustomerId())) {
+        if ("GDC".equals(request.getCustomerId())) {
             hmOrderService.createOrderVip(values);
         }
 
