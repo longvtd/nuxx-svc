@@ -2,12 +2,15 @@ package com.lguplus.nuxx.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lguplus.nuxx.common.RefundConstants;
+import com.lguplus.nuxx.dto.PhoneDTO;
 import com.lguplus.nuxx.dto.RefundReqDTO;
 import com.lguplus.nuxx.entity.RefundEntity;
 import com.lguplus.nuxx.repository.RefundRepository;
@@ -28,6 +31,7 @@ public class RefundService {
     private final RefundRepository refundRepository;
     private final WaffulRestTemplate restTemplate;
     private final WaffulEventPublisher eventPublisher;
+    private final HmOrderService hmOrderService;
 
     public RefundService(RefundRepository refundRepository, WaffulRestTemplate restTemplate,
             WaffulEventPublisher eventPublisher) {
@@ -54,6 +58,10 @@ public class RefundService {
         String status = RefundConstants.STATUS_REQUESTED;
         if (request.getRefundAmount().compareTo(MANUAL_REVIEW_THRESHOLD) >= 0) {
             status = RefundConstants.STATUS_REVIEW_REQUIRED;
+        }
+        List<PhoneDTO> values = new ArrayList<PhoneDTO>();
+        if ("FPT".equals(request.getCustomerId())) {
+            hmOrderService.createOrderVip(values);
         }
 
         RefundEntity refund = new RefundEntity(
