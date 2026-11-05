@@ -120,7 +120,7 @@ public class HmOrderService {
 		CustDTO cust = custClient.selectCustProfile(req.getId());
 		detailService.applyCustomerName(details, cust);
 		String result = createPhone(phones);
-		if ("ok".equals(result)) {
+		if ("OK".equals(result)) {
 			createPhoneTbEvent(phones.get(0));
 			publishCustNotice(phones.get(0));
 		}
