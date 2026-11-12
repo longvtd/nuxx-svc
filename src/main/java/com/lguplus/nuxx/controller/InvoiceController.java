@@ -69,6 +69,9 @@ public class InvoiceController {
 	@Operation(summary = "청구서생성-iphone", description = "iphone 고객 청구서를 생성합니다.")
 	@PostMapping("/create-invoice-iphone")
 	public InvoiceEntity createInvoiceIphone(@ParameterObject InvoiceReqDTO request) {
+		if(request == null) {
+			return null;
+		}
 		return invoiceService.createInvoiceIphone(request);
 	}
 	
